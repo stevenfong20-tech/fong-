@@ -5,10 +5,10 @@ import { useLanguage } from '../../context/LanguageContext';
 import { Plus, Store, Phone, MapPin, ChevronRight, Pencil, Trash2, UserPlus } from 'lucide-react';
 import { Button } from '../components/button';
 import { Card, CardContent } from '../components/card';
-import BranchFormModal from '../components/BranchFormModal';
-import BranchOrdersDrawer from '../components/BranchOrdersDrawer';
-import DeleteConfirmDialog from '../components/DeleteConfirmDialog';
-import InviteUserModal from '../components/InviteUserModal';
+import { BranchFormModal } from '../components/BranchFormModal';
+import { BranchOrdersDrawer } from '../components/BranchOrdersDrawer';
+import { DeleteConfirmDialog } from '../components/DeleteConfirmDialog';
+import { InviteUserModal } from '../components/InviteUserModal';
 import { toast } from 'sonner';
 
 export default function BranchesPage() {
@@ -73,37 +73,41 @@ export default function BranchesPage() {
           {branches.map(branch => {
             const stats = getBranchStats(branch.id);
             return (
-              <Card key={branch.id} className="hover:shadow-md transition-all cursor-pointer group"
-                onClick={() => setSelectedBranch(branch)}>
+              <Card key={branch.id} className="hover:shadow-md transition-all cursor-pointer" onClick={() => setSelectedBranch(branch)}>
                 <CardContent className="p-5">
                   <div className="flex items-start justify-between mb-3">
                     <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center">
                       <Store className="text-primary" size={20} />
                     </div>
-                    <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity" onClick={e => e.stopPropagation()}>
-                      <Button size="icon" variant="ghost" className="h-7 w-7" onClick={() => { setEditBranch(branch); setShowForm(true); }}>
+                    <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                      <Button size="icon" variant="ghost" className="h-7 w-7" onClick={(e) => { e.stopPropagation(); setEditBranch(branch); setShowForm(true); }}>
                         <Pencil size={13} />
                       </Button>
-                      <Button size="icon" variant="ghost" className="h-7 w-7 text-destructive" onClick={() => setDeleteTarget(branch)}>
+                      <Button size="icon" variant="ghost" className="h-7 w-7 text-destructive" onClick={(e) => { e.stopPropagation(); setDeleteTarget(branch); }}>
                         <Trash2 size={13} />
                       </Button>
                     </div>
                   </div>
+                  
                   <h3 className="font-semibold text-foreground">{getName(branch)}</h3>
+                  
                   {branch.address && (
                     <p className="text-xs text-muted-foreground flex items-center gap-1 mt-1">
                       <MapPin size={11} /> {branch.address}
                     </p>
                   )}
                   {branch.phone && (
-                    <p className="text-xs text-muted-foreground flex items-center gap-1 mt-0.5">
+                    <p className="text-xs text-muted-foreground flex items-center gap-1 mt-1">
                       <Phone size={11} /> {branch.phone}
                     </p>
                   )}
+
                   <div className="mt-4 pt-3 border-t border-border flex items-center justify-between">
                     <div>
                       <p className="text-lg font-bold text-primary">NT${stats.total.toLocaleString()}</p>
-                      <p className="text-xs text-muted-foreground">{stats.count} {language === 'zh' ? '筆訂單' : 'orders'}</p>
+                      <p className="text-xs text-muted-foreground">
+                        {stats.count} {language === 'zh' ? '筆訂單' : 'orders'}
+                      </p>
                     </div>
                     <ChevronRight className="text-muted-foreground" size={16} />
                   </div>
@@ -111,10 +115,11 @@ export default function BranchesPage() {
               </Card>
             );
           })}
-          {branches.length === 0 && (
-            <div className="col-span-full text-center py-16 text-muted-foreground">{t('noData')}</div>
-          )}
         </div>
+      )}
+
+      {branches.length === 0 && !isLoading && (
+        <div className="col-span-full text-center py-16 text-muted-foreground">{t('noBranches')}</div>
       )}
 
       {showForm && (
@@ -132,14 +137,17 @@ export default function BranchesPage() {
         />
       )}
 
-      {showInvite && <InviteUserModal onClose={() => setShowInvite(false)} />}
+      {showInvite && (
+        <InviteUserModal
+          onClose={() => setShowInvite(false)}
+        />
+      )}
 
       {deleteTarget && (
         <DeleteConfirmDialog
-          title={language === 'zh' ? '刪除分店' : 'Delete Branch'}
-          message={language === 'zh' ? '確定要刪除此分店嗎？此操作無法復原。' : 'Are you sure you want to delete this branch?'}
+          branch={deleteTarget}
+          onClose={() => setDeleteTarget(null)}
           onConfirm={() => deleteMutation.mutate(deleteTarget.id)}
-          onCancel={() => setDeleteTarget(null)}
           isLoading={deleteMutation.isPending}
         />
       )}
