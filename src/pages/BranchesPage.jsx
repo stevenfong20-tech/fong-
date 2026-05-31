@@ -5,10 +5,10 @@ import { useLanguage } from '../../lib/LanguageContext';
 import { Plus, Store, Phone, MapPin, ChevronRight, Pencil, Trash2, UserPlus } from 'lucide-react';
 import { Button } from '../components/ui/button';
 import { Card, CardContent } from '../components/ui/card';
-import BranchFormModal from '@/components/BranchFormModal';
-import BranchOrdersDrawer from '@/components/BranchOrdersDrawer';
-import DeleteConfirmDialog from '@/components/DeleteConfirmDialog';
-import InviteUserModal from '@/components/InviteUserModal';
+import BranchFormModal from '../components/BranchFormModal';
+import BranchOrdersDrawer from '../components/BranchOrdersDrawer';
+import DeleteConfirmDialog from '../components/DeleteConfirmDialog';
+import InviteUserModal from '../components/InviteUserModal';
 import { toast } from 'sonner';
 
 export default function BranchesPage() {
