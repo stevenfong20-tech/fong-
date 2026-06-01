@@ -1,12 +1,10 @@
 import React from 'react';
-import { LanguageProvider } from './context/LanguageContext';
-import BranchesPage from './pages/BranchesPage';
 
 function App() {
   return (
-    <LanguageProvider>
-      <BranchesPage />
-    </LanguageProvider>
+    <div style={{ padding: '50px', textAlign: 'center' }}>
+      <h1>Hello World! The setup is working!</h1>
+    </div>
   );
 }
 
