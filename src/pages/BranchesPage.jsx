@@ -3,6 +3,8 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { base44 } from '../lib/base44-client';
 import { useLanguage } from '../context/LanguageContext'; 
 import { Plus, Store, Phone, MapPin, ChevronRight, Pencil, Trash2, UserPlus } from 'lucide-react';
+
+// THESE ARE THE CORRECTED STANDARD PATHS:
 import { Button } from '../components/ui/button';
 import { Card, CardContent } from '../components/ui/card';
 import BranchFormModal from '../components/BranchFormModal';
@@ -90,24 +92,17 @@ export default function BranchesPage() {
                   </div>
                   
                   <h3 className="font-semibold text-foreground">{getName(branch)}</h3>
-                  
-                  {branch.address && (
-                    <p className="text-xs text-muted-foreground flex items-center gap-1 mt-1">
-                      <MapPin size={11} /> {branch.address}
-                    </p>
-                  )}
-                  {branch.phone && (
-                    <p className="text-xs text-muted-foreground flex items-center gap-1 mt-1">
-                      <Phone size={11} /> {branch.phone}
-                    </p>
-                  )}
+                  <p className="text-xs text-muted-foreground flex items-center gap-1 mt-1">
+                    <MapPin size={11} /> {branch.address || 'No address'}
+                  </p>
+                  <p className="text-xs text-muted-foreground flex items-center gap-1 mt-1">
+                    <Phone size={11} /> {branch.phone || 'No phone'}
+                  </p>
 
                   <div className="mt-4 pt-3 border-t border-border flex items-center justify-between">
                     <div>
                       <p className="text-lg font-bold text-primary">NT${stats.total.toLocaleString()}</p>
-                      <p className="text-xs text-muted-foreground">
-                        {stats.count} {language === 'zh' ? '筆訂單' : 'orders'}
-                      </p>
+                      <p className="text-xs text-muted-foreground">{stats.count} {language === 'zh' ? '筆訂單' : 'orders'}</p>
                     </div>
                     <ChevronRight className="text-muted-foreground" size={16} />
                   </div>
@@ -118,39 +113,10 @@ export default function BranchesPage() {
         </div>
       )}
 
-      {branches.length === 0 && !isLoading && (
-        <div className="col-span-full text-center py-16 text-muted-foreground">{t('noData')}</div>
-      )}
-
-      {showForm && (
-        <BranchFormModal
-          branch={editBranch}
-          onClose={() => setShowForm(false)}
-        />
-      )}
-
-      {selectedBranch && (
-        <BranchOrdersDrawer
-          branch={selectedBranch}
-          orders={orders.filter(o => o.branch_id === selectedBranch.id)}
-          onClose={() => setSelectedBranch(null)}
-        />
-      )}
-
-      {showInvite && (
-        <InviteUserModal
-          onClose={() => setShowInvite(false)}
-        />
-      )}
-
-      {deleteTarget && (
-        <DeleteConfirmDialog
-          branch={deleteTarget}
-          onClose={() => setDeleteTarget(null)}
-          onConfirm={() => deleteMutation.mutate(deleteTarget.id)}
-          isLoading={deleteMutation.isPending}
-        />
-      )}
+      {showForm && <BranchFormModal branch={editBranch} onClose={() => setShowForm(false)} />}
+      {selectedBranch && <BranchOrdersDrawer branch={selectedBranch} orders={orders.filter(o => o.branch_id === selectedBranch.id)} onClose={() => setSelectedBranch(null)} />}
+      {showInvite && <InviteUserModal onClose={() => setShowInvite(false)} />}
+      {deleteTarget && <DeleteConfirmDialog branch={deleteTarget} onClose={() => setDeleteTarget(null)} onConfirm={() => deleteMutation.mutate(deleteTarget.id)} isLoading={deleteMutation.isPending} />}
     </div>
   );
 }
