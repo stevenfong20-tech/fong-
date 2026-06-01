@@ -3,7 +3,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { base44 } from '../lib/base44-client';
 import { useLanguage } from '../context/LanguageContext'; 
 import { Plus, Store, Phone, MapPin, ChevronRight, Pencil, Trash2, UserPlus } from 'lucide-react';
-import { button } from '../components/button/Button';
+import { button } from '../components/button/button';
 import { Card, CardContent } from '../components/card/Card';
 import BranchFormModal from '../components/BranchFormModal';
 import BranchOrdersDrawer from '../components/BranchOrdersDrawer';
