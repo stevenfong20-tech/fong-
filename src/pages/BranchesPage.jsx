@@ -7,8 +7,8 @@ import { Button } from '../components/ui/button';
 import { Card, CardContent } from '../components/ui/components/ui/card';
 import BranchFormModal from '../components/components/BranchFormModal';
 import BranchOrdersDrawer from '../components/components/BranchOrdersDrawer';
-import DeleteConfirmDialog from '../components/DeleteConfirmDialog';
-import InviteUserModal from '../components/InviteUserModal';
+import DeleteConfirmDialog from '../components/components/DeleteConfirmDialog';
+import InviteUserModal from '../components/components/InviteUserModal';
 import { toast } from 'sonner';
 
 export default function BranchesPage() {
